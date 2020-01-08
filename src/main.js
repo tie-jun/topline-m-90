@@ -12,6 +12,7 @@ import 'normalize.css'
 // 配置 REM 适配
 import 'amfe-flexible'
 
+import '@/styles/base.less'
 // 加载全局样式
 import './styles/index.less'
 Vue.config.productionTip = false

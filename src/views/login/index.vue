@@ -6,8 +6,8 @@
 
     <!-- 手机号和密码 -->
     <van-cell-group>
-  <van-field required clearable label="手机号" placeholder="请输入手机号"/>
-  <van-field label="密码" placeholder="请输入密码" required/>
+  <van-field required  v-model="user.mmobile" clearable label="手机号" placeholder="请输入手机号"/>
+  <van-field label="密码" v-model="user.code" placeholder="请输入密码" required/>
     </van-cell-group>
     <!--  手机号和密码 -->
 
@@ -19,9 +19,18 @@
 </template>
 
 <script>
-import '../../utils/register-vant'
+import '@/utils/register-vant'
+import '@/styles/base.less'
 export default {
-  name: 'LoginPage'
+  name: 'LoginPage',
+  data () {
+    return {
+      user: {
+        mobile: '',
+        code: ''
+      }
+    }
+  }
 }
 </script>
 

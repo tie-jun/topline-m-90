@@ -7,8 +7,13 @@
     <!-- 手机号和密码 -->
     <van-cell-group>
   <van-field required  v-model="user.mobile" clearable label="手机号" placeholder="请输入手机号"/>
-  <van-field label="密码" v-model="user.code" placeholder="请输入密码" required>
-    <van-button slot="button" size="small" type="primary">发送验证码</van-button>
+  <van-field label="密码" v-model="user.code" placeholder="请输入验证码" required>
+    <van-count-down
+    v-if="isCountDownShow"
+    slot="button" :time="1000*60"
+    format=" ss s"
+    @finish="isCountDownShow = false"/>
+    <van-button slot="button" v-else size="small" type="primary" @click="onSmsCode">发送验证码</van-button>
   </van-field>
     </van-cell-group>
     <!--  手机号和密码 -->
@@ -22,15 +27,17 @@
 
 <script>
 
-import { login } from '@/api/user'
+import { login, getSmsCode } from '@/api/user'
+
 export default {
   name: 'LoginPage',
   data () {
     return {
       user: {
-        mobile: '13911111111',
-        code: '246810'
-      }
+        mobile: '',
+        code: ''
+      },
+      isCountDownShow: false
     }
   },
   methods: {
@@ -46,14 +53,37 @@ export default {
 
       // 3.请求提交
       try {
-        const res = await login(user)
-        console.log(res)
+        const result = await login(user)
+        console.log(result)
         this.$toast.success('登录成功')
       } catch (err) {
         console.log('登录失败')
         this.$toast.fail('登录失败')
       }
       // 4.根据接口返回结果执行后续业务处理
+    },
+    async onSmsCode () {
+      // 1.获取手机号
+      const { mobile } = this.user
+      // 2.校验手机号
+      // 3.发送验证码
+      try {
+        // 显示倒计时
+        this.isCountDownShow = true
+        // 发送
+        await getSmsCode(mobile)
+      } catch (err) {
+        // 发送失败
+        console.log(err)
+        // 发送失败关闭倒计时
+        this.isCountDownShow = false
+        // 频繁提示
+        if (err.response.status === 429) {
+          this.$toast('请勿频繁发送')
+          return
+        }
+        this.$toast('发送失败')
+      }
     }
   }
 }

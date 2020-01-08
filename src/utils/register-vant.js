@@ -6,7 +6,8 @@ import {
   Tab, Tabs,
   NavBar,
   CellGroup,
-  Toast
+  Toast,
+  CountDown
 } from 'vant'
 // 注册
 Vue.use(Button)
@@ -15,3 +16,4 @@ Vue.use(Button)
   .use(NavBar)
   .use(CellGroup)
   .use(Toast)
+  .use(CountDown)

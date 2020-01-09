@@ -5,23 +5,47 @@
     <!-- 登录头 -->
 
     <!-- 手机号和密码 -->
-    <van-cell-group>
-  <van-field required  v-model="user.mobile" clearable label="手机号" placeholder="请输入手机号"/>
-  <van-field label="密码" v-model="user.code" placeholder="请输入验证码" required>
-    <van-count-down
-    v-if="isCountDownShow"
-    slot="button" :time="1000*60"
-    format=" ss s"
-    @finish="isCountDownShow = false"/>
-    <van-button slot="button" v-else size="small" type="primary" @click="onSmsCode">发送验证码</van-button>
-  </van-field>
-    </van-cell-group>
+    <ValidationObserver>
+    <!-- 手机号 -->
+      <ValidationProvider name="手机号" rules="required">
+          <van-field
+          v-model="user.mobile"
+          clearable label="手机号"
+          placeholder="请输入手机号"/>
+      </ValidationProvider>
+    <!-- 手机号 -->
+    <!-- 验证码 -->
+      <ValidationProvider name="验证码" rules="required | length：11" v-slot="{ errors }">
+
+          <van-field label="密码"
+          v-model="user.code"
+          placeholder="请输入验证码" required>
+
+        <van-count-down
+          v-if="isCountDownShow"
+          slot="button" :time="1000*60"
+          format=" ss s"
+          @finish="isCountDownShow = false"/>
+
+        <van-button slot="button"
+          v-else size="small"
+          type="primary"
+          round
+          @click="onSmsCode">发送验证码</van-button>
+        </van-field>
+
+      </ValidationProvider>
+    <!-- 验证码 -->
+    </ValidationObserver>
     <!--  手机号和密码 -->
 
     <!-- 登录按钮 -->
     <div class="loginButton">
-      <van-button type="info" @click="onLogin" class="Button">登录</van-button>
+      <van-button type="info"
+        @click="onLogin"
+        class="Button">登录</van-button>
     </div>
+    <!-- 登录按钮 -->
   </div>
 </template>
 
@@ -62,6 +86,7 @@ export default {
       }
       // 4.根据接口返回结果执行后续业务处理
     },
+
     async onSmsCode () {
       // 1.获取手机号
       const { mobile } = this.user

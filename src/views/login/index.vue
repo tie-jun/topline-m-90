@@ -5,9 +5,9 @@
     <!-- 登录头 -->
 
     <!-- 手机号和密码 -->
-    <ValidationObserver>
+    <ValidationObserver ref="myForm">
     <!-- 手机号 -->
-      <ValidationProvider name="手机号" rules="required">
+      <ValidationProvider name="手机号" rules="required|mobileA">
           <van-field
           v-model="user.mobile"
           clearable label="手机号"
@@ -15,9 +15,9 @@
       </ValidationProvider>
     <!-- 手机号 -->
     <!-- 验证码 -->
-      <ValidationProvider name="验证码" rules="required | length：11" v-slot="{ errors }">
+      <ValidationProvider name="验证码" rules="required|code">
 
-          <van-field label="密码"
+          <van-field label="验证码"
           v-model="user.code"
           placeholder="请输入验证码" required>
 
@@ -69,6 +69,21 @@ export default {
       // 1.获取表单数据
       const user = this.user
       // 2.表单验证
+
+      const success = await this.$refs.myForm.validate()
+
+      // 如果验证失败提示错误，停止代码
+      if (!success) {
+        setTimeout(() => {
+          const errors = this.$refs.myForm.errors
+          const item = Object.values(errors).find(item => {
+            // 如果验证失败提醒消息
+            return item[0]
+          })
+          this.$toast(item[0])
+        }, 100)
+        return
+      }
       this.$toast.loading({
         duration: 0, // 持续展示 toast
         message: '登录中...',

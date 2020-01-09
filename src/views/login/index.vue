@@ -52,6 +52,7 @@
 <script>
 
 import { login, getSmsCode } from '@/api/user'
+import { validate } from 'vee-validate'
 
 export default {
   name: 'LoginPage',
@@ -106,6 +107,15 @@ export default {
       // 1.获取手机号
       const { mobile } = this.user
       // 2.校验手机号
+      const validateResult = await validate(mobile, 'required|mobileA', {
+        name: '手机号'
+      })
+
+      // 如果验证失败，提示错误消息，停止发送验证码
+      if (!validateResult.valid) {
+        this.$toast(validateResult.errors[0])
+        return
+      }
       // 3.发送验证码
       try {
         // 显示倒计时

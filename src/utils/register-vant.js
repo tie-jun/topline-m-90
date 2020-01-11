@@ -19,7 +19,8 @@ import {
   Grid,
   GridItem,
   Icon,
-  Cell
+  Cell,
+  Dialog
 } from 'vant'
 // 注册
 Vue.use(Button)
@@ -36,3 +37,4 @@ Vue.use(Button)
   .use(Icon)
   .use(GridItem)
   .use(Cell)
+  .use(Dialog)

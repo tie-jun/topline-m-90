@@ -12,7 +12,9 @@ import {
   NavBar,
   CellGroup,
   Toast,
-  CountDown
+  CountDown,
+  Tabbar,
+  TabbarItem
 } from 'vant'
 // 注册
 Vue.use(Button)
@@ -22,3 +24,5 @@ Vue.use(Button)
   .use(CellGroup)
   .use(Toast)
   .use(CountDown)
+  .use(Tabbar)
+  .use(TabbarItem)

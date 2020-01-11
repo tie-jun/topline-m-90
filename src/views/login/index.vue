@@ -94,7 +94,9 @@ export default {
       // 3.请求提交
       try {
         const result = await login(user)
-        console.log(result)
+        // 讲登录状态存储到vuex容器中
+        this.$store.commit('setUser', result.data.data)
+        // 提示登录成功
         this.$toast.success('登录成功')
       } catch (err) {
         console.log('登录失败')

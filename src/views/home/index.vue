@@ -26,7 +26,7 @@
   close-icon-position="top-left"
   :style="{ height: '100%' }"
 >
-<channel-edit   :user-channels="userChannels"/>
+<channel-edit    :user-channels="userChannels" />
 </van-popup>
   <!-- 频道编辑 -->
 

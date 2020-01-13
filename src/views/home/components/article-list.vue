@@ -77,13 +77,25 @@ export default {
     //     }
     //   }, 500)
     // },
-    onRefresh () {
-      setTimeout(() => {
-        this.$toast('刷新成功')
-        this.isLoading = false
-      }, 1000)
-    }
+    // 下拉刷新
+    async onRefresh () {
+      // 1. 请求获取数据
+      const { data } = await getArticle({
+        channel_id: this.channel.id, // 频道id
+        timestamp: Date.now(), // 时间戳，请求新的推荐数据传当前的时间戳，请求历史推荐传指定的时间戳
+        with_top: 1
+      })
 
+      // 2. 如果有最新数据，则把数据放到列表的顶部
+      const { results } = data.data
+      this.list.unshift(...results)
+
+      // 3. 关闭下拉刷新的 loading 状态
+      this.isLoading = false
+
+      // 提示更新成功
+      this.$toast(`更新了${results.length}条数据`)
+    }
   }
 }
 </script>

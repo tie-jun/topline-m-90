@@ -15,9 +15,9 @@
     <van-cell title="推荐频道" :border="false" />
     <van-grid :gutter="10">
       <van-grid-item
-        v-for="value in 8"
-        :key="value"
-        text="文字"
+        v-for="value in remainingChannels"
+        :key="value.id"
+        :text="value.name"
       />
     </van-grid>
   </div>
@@ -38,11 +38,27 @@ export default {
       AllChannels: []
     }
   },
-  computed: {},
+  computed: {
+    //   计算剩余的推荐频道  思路：剩余频道 = 所有频道 - 我的频道
+    remainingChannels () {
+      const { allChannels, userChannels } = this
+      // 剩余频道 = 所有频道 - 我的频道
+      const channels = []
+      // 遍历所有频道
+      allChannels.forEach(item => {
+      // 如果我的频道中不包含当前被遍历的频道，则要
+        if (!userChannels.find(c => c.id === item.id)) {
+          channels.push(item)
+        }
+      })
+      return channels
+    }
+  },
   created () {
     this.loadAllChannels()
   },
   methods: {
+    //   获取所有频道
     async loadAllChannels () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels

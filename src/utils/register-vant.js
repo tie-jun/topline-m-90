@@ -22,7 +22,8 @@ import {
   Cell,
   Dialog,
   List,
-  PullRefresh
+  PullRefresh,
+  Popup
 } from 'vant'
 // 注册
 Vue.use(Button)
@@ -42,3 +43,4 @@ Vue.use(Button)
   .use(Dialog)
   .use(List)
   .use(PullRefresh)
+  .use(Popup)

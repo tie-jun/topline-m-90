@@ -12,12 +12,13 @@
 
     <van-grid :gutter="10">
       <van-grid-item
-        v-for="value in userChannels"
+        v-for="(value,index) in userChannels"
         :key="value.id"
         :text="value.name"
+        @click="onUserChannelClick(index)"
       >
       <van-icon
-      v-show="isEditShow"
+     v-show="isEditShow && index !== 0"
       slot="icon"
       name="close" />
       </van-grid-item>
@@ -26,9 +27,9 @@
     <van-cell title="推荐频道" :border="false" />
     <van-grid :gutter="10">
       <van-grid-item
-         v-for="channel in remainingChannels"
-         :key="channel.id"
-         :text="channel.name"
+    v-for="channel in remainingChannels"
+    :key="channel.id"
+    :text="channel.name"
          @click="onChannelAdd(channel)"
       />
     </van-grid>
@@ -43,22 +44,26 @@ export default {
     userChannels: {
       type: Array,
       required: true
+    },
+    value: {
+      type: Number,
+      required: true
     }
   },
   data () {
     return {
-      AllChannels: [],
+      allChannels: [], // 所有频道: [],
       isEditShow: false
     }
   },
   computed: {
     //   计算剩余的推荐频道  思路：剩余频道 = 所有频道 - 我的频道
     remainingChannels () {
-      const { AllChannels, userChannels } = this
+      const { allChannels, userChannels } = this
       // 剩余频道 = 所有频道 - 我的频道
       const channels = []
       // 遍历所有频道
-      AllChannels.forEach(item => {
+      allChannels.forEach(item => {
       // 如果我的频道中不包含当前被遍历的频道，则要
         if (!userChannels.find(c => c.id === item.id)) {
           channels.push(item)
@@ -75,6 +80,16 @@ export default {
     async loadAllChannels () {
       const { data } = await getAllChannels()
       this.allChannels = data.data.channels
+    },
+    onUserChannelClick (index) {
+      // 如果是编辑状态，则执行删除操作
+      if (this.isEditShow && index !== 0) {
+        this.userChannels.splice(index, 1) // 从索引处开始，删除指定的个数
+      } else {
+        // 如果是非编辑状态，则切换频道
+        this.$emit('input', index) // 修改激活的标签
+        this.$emit('close') // 关闭弹层
+      }
     }
   },
   onChannelAdd (channel) {

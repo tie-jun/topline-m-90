@@ -44,6 +44,19 @@ export default {
 }
 </script>
 
-<style>
-
+<style lang="less" scoped>
+.search-container {
+  padding-top: 54px;
+  // 让搜索栏固定在顶部
+  .search-form {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1;
+  }
+  .van-search__action {
+    color: #fff;
+  }
+}
 </style>

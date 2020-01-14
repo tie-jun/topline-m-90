@@ -38,16 +38,12 @@
         &nbsp;&nbsp;&nbsp;
         <span>完成</span>
       </van-cell>
-      <van-cell title="历史记录" icon=search >
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="历史记录" icon=search >
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="历史记录" icon=search >
-        <van-icon name="close"></van-icon>
-      </van-cell>
-      <van-cell title="历史记录" icon=search >
+      <van-cell
+      :title="item"
+      icon=search
+      v-for="(item,index) in searchHistories"
+      :key="index"
+      >
         <van-icon name="close"></van-icon>
       </van-cell>
     </van-cell-group>
@@ -59,12 +55,19 @@
 <script>
 import SearchResult from './components/search-result'
 import { getSuggestions } from '@/api/serach'
+import { getItem, setItem } from '@/utils/storege'
 export default {
   data () {
     return {
       searchText: '',
       isRueultShow: false,
-      Suggestions: []// 联想建议
+      Suggestions: [], // 联想建议
+      searchHistories: getItem('search-histories') || [] // 收集搜索历史记录
+    }
+  },
+  watch: {
+    searchHistories (newVal) {
+      setItem('search-histories', newVal)
     }
   },
   components: {
@@ -72,6 +75,12 @@ export default {
   },
   methods: {
     onSearch () {
+      // 记录历史搜索记录
+      const index = this.searchHistories.indexOf(this.searchText)
+      if (index !== -1) {
+        this.searchHistories.splice(index, 1)
+      }
+      this.searchHistories.unshift(this.searchText)
       this.isRueultShow = true
     },
 

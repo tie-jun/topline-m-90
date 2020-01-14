@@ -6,7 +6,7 @@
     v-model="searchText"
     placeholder="请输入搜索关键词"
     show-action
-    @search="onSearch"
+    @search="onSearch(searchText)"
     @cancel="$router.back()"
     @focus="isRueultShow = false"
     @input="onSearchInput"
@@ -24,6 +24,7 @@
       icon=search
       v-for="(item,index) in Suggestions"
       :key="index"
+      @click="onSearch(item)"
       >
       <div slot="title" v-html="highlight(item)"></div>
       </van-cell>
@@ -32,19 +33,25 @@
 
     <!-- 历史记录 -->
     <van-cell-group v-else>
-      <van-cell title="历史记录" icon=search >
-        <van-icon name="delete"></van-icon>
-        <span>全部删除</span>
+      <van-cell title="历史记录">
+        <template v-if="isDeleteShow">
+         <span @click="searchHistories = []">全部删除</span>
         &nbsp;&nbsp;&nbsp;
-        <span>完成</span>
+        <span @click="isDeleteShow = false">完成</span>
+        </template>
+        <van-icon v-else name="delete" @click="isDeleteShow = true"></van-icon>
       </van-cell>
       <van-cell
       :title="item"
-      icon=search
       v-for="(item,index) in searchHistories"
       :key="index"
+      @click="onSearch(item)"
       >
-        <van-icon name="close"></van-icon>
+        <van-icon
+        name="close"
+        v-show="isDeleteShow"
+        @click="searchHistories.splice(index,1)"
+        ></van-icon>
       </van-cell>
     </van-cell-group>
     <!-- /历史记录 -->
@@ -62,7 +69,8 @@ export default {
       searchText: '',
       isRueultShow: false,
       Suggestions: [], // 联想建议
-      searchHistories: getItem('search-histories') || [] // 收集搜索历史记录
+      searchHistories: getItem('search-histories') || [], // 收集搜索历史记录
+      isDeleteShow: false
     }
   },
   watch: {
@@ -74,13 +82,16 @@ export default {
     SearchResult
   },
   methods: {
-    onSearch () {
-      // 记录历史搜索记录
+    onSearch (q) {
+      // 1.修改文本框内容
+      this.searchText = q
+      // 2.记录历史搜索记录
       const index = this.searchHistories.indexOf(this.searchText)
       if (index !== -1) {
         this.searchHistories.splice(index, 1)
       }
       this.searchHistories.unshift(this.searchText)
+      // 3.展示搜索结果
       this.isRueultShow = true
     },
 

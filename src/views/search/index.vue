@@ -15,7 +15,7 @@
     <!-- /搜索栏 -->
     <!-- 搜索结果 -->
 
-      <search-result v-if="isRueultShow" />
+      <search-result v-if="isRueultShow" :q="searchText" />
     <!-- /搜索结果 -->
 
     <!-- 联想建议 -->
@@ -72,7 +72,6 @@ export default {
   },
   methods: {
     onSearch () {
-      console.log(this.searchText)
       this.isRueultShow = true
     },
 
@@ -82,7 +81,6 @@ export default {
         return
       }
       const { data } = await getSuggestions(searchText)
-      console.log(data)
       this.Suggestions = data.data.options
     },
 

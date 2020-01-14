@@ -9,6 +9,7 @@
     @search="onSearch"
     @cancel="$router.back()"
     @focus="isRueultShow = false"
+    @input="onSearchInput"
   />
   </form>
     <!-- /搜索栏 -->
@@ -19,12 +20,12 @@
 
     <!-- 联想建议 -->
     <van-cell-group v-else-if="searchText">
-      <van-cell title="单元格" icon=search />
-      <van-cell title="单元格" icon=search />
-      <van-cell title="单元格" icon=search />
-      <van-cell title="单元格" icon=search />
-      <van-cell title="单元格" icon=search />
-      <van-cell title="单元格" icon=search />
+      <van-cell
+      :title="item"
+      icon=search
+      v-for="(item,index) in Suggestions"
+      :key="index"
+      />
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -56,11 +57,13 @@
 
 <script>
 import SearchResult from './components/search-result'
+import { getSuggestions } from '@/api/serach'
 export default {
   data () {
     return {
       searchText: '',
-      isRueultShow: false
+      isRueultShow: false,
+      Suggestions: []// 联想建议
     }
   },
   components: {
@@ -70,6 +73,16 @@ export default {
     onSearch () {
       console.log(this.searchText)
       this.isRueultShow = true
+    },
+
+    async onSearchInput () {
+      const searchText = this.searchText
+      if (!searchText) {
+        return
+      }
+      const { data } = await getSuggestions(searchText)
+      console.log(data)
+      this.Suggestions = data.data.options
     }
 
   }

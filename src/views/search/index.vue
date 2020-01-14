@@ -21,11 +21,12 @@
     <!-- 联想建议 -->
     <van-cell-group v-else-if="searchText">
       <van-cell
-      :title="item"
       icon=search
       v-for="(item,index) in Suggestions"
       :key="index"
-      />
+      >
+      <div slot="title" v-html="highlight(item)"></div>
+      </van-cell>
     </van-cell-group>
     <!-- /联想建议 -->
 
@@ -83,6 +84,16 @@ export default {
       const { data } = await getSuggestions(searchText)
       console.log(data)
       this.Suggestions = data.data.options
+    },
+
+    highlight (str) {
+      // /this.searchText/  注意：/这里的一切都是字符串/
+    // 如果想要动态的创建一个正则表达式，使用 new RegExp 手动构造
+    // 它会根据字符串创建一个正则表达式对象
+    // 参数2：用来指定匹配模式，例如 g 全局，i 忽略大小写
+    // /dsadsa/gi
+      const reg = new RegExp(this.searchText, 'ig')
+      return str.replace(reg, `<span style="color: red">${this.searchText}</span>`)
     }
 
   }

@@ -63,6 +63,7 @@
 import SearchResult from './components/search-result'
 import { getSuggestions } from '@/api/serach'
 import { getItem, setItem } from '@/utils/storege'
+import { debounce } from 'lodash'
 export default {
   data () {
     return {
@@ -95,14 +96,23 @@ export default {
       this.isRueultShow = true
     },
 
-    async onSearchInput () {
+    onSearchInput: debounce(async function () {
       const searchText = this.searchText
       if (!searchText) {
         return
       }
       const { data } = await getSuggestions(searchText)
       this.Suggestions = data.data.options
-    },
+    }, 500),
+
+    // async onSearchInput () {
+    //   const searchText = this.searchText
+    //   if (!searchText) {
+    //     return
+    //   }
+    //   const { data } = await getSuggestions(searchText)
+    //   this.Suggestions = data.data.options
+    // },
 
     highlight (str) {
       // /this.searchText/  注意：/这里的一切都是字符串/

@@ -26,11 +26,11 @@
 
     <van-cell title="推荐频道" :border="false" />
     <van-grid :gutter="10">
-      <van-grid-item
-    v-for="channel in remainingChannels"
-    :key="channel.id"
-    :text="channel.name"
-         @click="onChannelAdd(channel)"
+    <van-grid-item
+    v-for="(item,index) in remainingChannels"
+    :key="index"
+    :text="item.name"
+    @click="onChannelAdd(item)"
       />
     </van-grid>
   </div>
@@ -90,13 +90,13 @@ export default {
         this.$emit('input', index) // 修改激活的标签
         this.$emit('close') // 关闭弹层
       }
-    }
-  },
-  onChannelAdd (channel) {
-  // 将点击的频道项添加到我的频道列表中
-    this.channels.push(channel)
+    },
+    onChannelAdd (channel) {
+      // 将点击的频道项添加到我的频道列表中
+      this.userChannels.push(channel)
 
-  // 不需要删除，我的频道改变，计算属性 recommendChannels 重新调用求值
+      // 不需要删除，我的频道改变，计算属性 recommendChannels 重新调用求值
+    }
   }
 }
 </script>

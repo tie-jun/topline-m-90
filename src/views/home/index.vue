@@ -1,7 +1,17 @@
 <template>
   <div class="home-container">
-  <!-- 导航栏 -->
-  <van-nav-bar title="首页" fixed/>
+ <!-- 导航栏 -->
+    <div class="nav-bar">
+      <div class="logo"></div>
+      <van-button
+        class="search-btn"
+        round
+        type="info"
+        size="small"
+        icon="search"
+        @click="$router.push('search/')"
+      >搜索</van-button>
+    </div>
   <!-- 导航栏 -->
 
   <!-- 频道列表 -->
@@ -103,6 +113,24 @@ export default {
     right: 0;
     line-height: 44px;
     background: #fff;
-}
+  }
+  .nav-bar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 15px;
+    height: 46px;
+    background-color: #3196fa;
+    z-index: 1;
+  }
+  .search-btn {
+      background-color: #5babfb;
+      width: 50%;
+    }
+
 }
 </style>
